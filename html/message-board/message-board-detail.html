@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>监利市农业电子商务综合服务子系统</title>
+    <link rel="stylesheet" href="../../css/reset.css" />
+    <link rel="stylesheet" href="../../css/index.css" />
+    <link rel="stylesheet" href="../../fonts/element.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="title-section">
+        <h1 class="system-title">监利市农业电子商务综合服务子系统</h1>
+      </div>
+
+      <div class="mainer">
+        <div class="nav-list">
+          <a class="nav-item" href="../../index.html">首页</a>
+          <a class="nav-item" href="../market-condition.html">市场行情</a>
+          <a class="nav-item" href="../price-condition.html">价格行情</a>
+          <a class="nav-item" href="../price-trend.html">价格走势</a>
+          <a class="nav-item" href="../farm-products.html">优质农产品</a>
+          <a class="nav-item" href="../production-market/production-market.html">农产品产销信息</a>
+          <a class="nav-item active" href="./message-board.html">留言板</a>
+        </div>
+
+        <div class="banner-section" style="height: 200px">
+          <img src="../../images/banner-6.png" alt="" style="height: 200px" />
+        </div>
+
+        <div class="message-board-section">
+          <div class="message-board-nav">
+            <h2 class="message-board-nav-left">您所在的位置： 首页 > 留言板</h2>
+          </div>
+          <div class="message-board-content">
+            <p class="message-board-content-title">用户留言</p>
+            <div class="message-board-content-detail">
+              <h2 class="message-board-detail-title">{{row.title}}</h2>
+              <div class="message-board-detail-container">
+                <div class="message-board-detail-top-info">
+                  <span>时间：{{row.messageTime}}</span>
+                  <span>留言人: {{row.commenter}}</span>
+                </div>
+                <div class="message-board-detail-text" v-html="row.content"></div>
+                <p class="message-board-detail-reply">回复</p>
+                <p class="message-board-admin-reply">
+                  管理员：<span v-if="row.isReply == 1">{{replayInfos.responder}}</span>
+                </p>
+                <p class="message-board-reply-time">
+                  时间：<span v-if="row.isReply == 1">{{replayInfos.replyTime}}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <a>主办单位：监利市农业农村局 &nbsp;&nbsp;</a>
+          <a>承办单位：武汉中迪联创科技有限公司&nbsp;&nbsp;</a>
+          <a>鄂ICP备 xxx号-1鄂公网安备 xxx号</a>
+        </footer>
+      </div>
+    </div>
+  </body>
+  <script src="../../assets/vue/vue.min.js"></script>
+  <script src="../../assets/element/index.js"></script>
+  <script src="../../js/api.js"></script>
+  <script src="../../assets/jquery/jquery.min.js"></script>
+  <script type="text/javascript">
+    var App = new Vue({
+      el: '#app',
+      data() {
+        return {
+          row: {},
+          replayInfos: {},
+        };
+      },
+      created() {
+        this.getAllList();
+      },
+      methods: {
+        getAllList() {
+          let search = location.search;
+          let id = search.substr(1);
+          doApi_2(
+            (res) => {
+              console.log(res);
+              if (res.status == 200) {
+                this.row = res.data;
+                this.replayInfos = res.data.replyInfos[0];
+              }
+            },
+            function (err) {
+              console.log(err);
+            },
+            null,
+            '/qa/getQA?qaId=' + id,
+            'post',
+            null,
+            null
+          );
+        },
+      },
+    });
+  </script>
+</html>

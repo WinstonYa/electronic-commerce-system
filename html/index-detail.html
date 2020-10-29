@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>监利市农业电子商务综合服务子系统</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="stylesheet" href="../fonts/element.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="title-section">
+        <h1 class="system-title">监利市农业电子商务综合服务子系统</h1>
+      </div>
+
+      <div class="mainer">
+        <div class="nav-list">
+          <a class="nav-item" href="./../index.html">首页</a>
+          <a class="nav-item" href="./market-condition.html">市场行情</a>
+          <a class="nav-item" href="./price-condition.html">价格行情</a>
+          <a class="nav-item" href="./price-trend.html">价格走势</a>
+          <a class="nav-item" href="./farm-products.html">优质农产品</a>
+          <a class="nav-item" href="./production-market.html">农产品产销信息</a>
+          <a class="nav-item" href="./message-board/message-board.html">留言板</a>
+        </div>
+
+        <div class="banner-section">
+          <img src="../images/banner-5.png" alt="" />
+        </div>
+
+        <div class="market-info-container">
+          <p class="market-info-nav">
+            您所在的位置： {{articleType}} <i class="el-icon-d-arrow-right"></i> {{articleContent.title}}
+          </p>
+          <a class="market-info-return-btn" @click="goLastPage">
+            <el-button type="primary" style="width: 100px !important">返回</el-button>
+          </a>
+        </div>
+
+        <div class="market-info-top-content">
+          <h2 class="market-info-top-title">{{articleContent.title}}</h2>
+          <div class="market-info-top-issue-desc">
+            <span class="issue-time">发布时间：{{articleContent.pubTime}}</span>
+            <!-- <span class="issue-origin">来源：</span> -->
+            <span class="issue-auther">作者：{{articleContent.author}}</span>
+            <span class="issue-read">阅读量：（{{articleContent.pageviews}}）</span>
+          </div>
+        </div>
+
+        <div class="market-info-text-content" v-html="articleContent.content"></div>
+
+        <div class="market-info-article-change">
+          <a class="market-info-article-change-item">上一篇：市商务局三措并举助推农村电商发展</a>
+          <a class="market-info-article-change-item">下一篇：市商务局三措并举助推农村电商发展</a>
+        </div>
+
+        <footer class="footer">
+          <a>主办单位：监利市农业农村局 &nbsp;&nbsp;</a>
+          <a>承办单位：武汉中迪联创科技有限公司&nbsp;&nbsp;</a>
+          <a>鄂ICP备 xxx号-1鄂公网安备 xxx号</a>
+        </footer>
+      </div>
+    </div>
+  </body>
+  <script src="../assets/vue/vue.min.js"></script>
+  <script src="../assets/element/index.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../assets/jquery/jquery.min.js"></script>
+  <script>
+    var App = new Vue({
+      el: '#app',
+      data() {
+        return {
+          //文章内容
+          articleContent: {},
+          articleType: '',
+        };
+      },
+      created() {
+        this.getArticleList();
+      },
+      methods: {
+        //返回上一页
+        goLastPage() {
+          history.go(-1);
+        },
+        getArticleList() {
+          let search = location.search;
+          let id = search.substr(1);
+          doApi_1(
+            (res) => {
+              console.log(res);
+              if (res.status == 200) {
+                this.articleContent = res.data;
+                this.articleType = res.data.articleSysList[0].articleTypeid;
+              }
+            },
+            function (err) {
+              console.log(err);
+            },
+            null,
+            '/article/id?id=' + id,
+            'get',
+            null,
+            null
+          );
+        },
+      },
+    });
+  </script>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>监利市农业电子商务综合服务子系统</title>
+    <link rel="stylesheet" href="../../css/reset.css" />
+    <link rel="stylesheet" href="../../css/index.css" />
+    <link rel="stylesheet" href="../../fonts/element.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="title-section">
+        <h1 class="system-title">监利市农业电子商务综合服务子系统</h1>
+      </div>
+
+      <div class="mainer">
+        <div class="nav-list">
+          <a class="nav-item" href="../../index.html">首页</a>
+          <a class="nav-item" href="../market-condition.html">市场行情</a>
+          <a class="nav-item" href="../price-condition.html">价格行情</a>
+          <a class="nav-item" href="../price-trend.html">价格走势</a>
+          <a class="nav-item" href="../farm-products.html">优质农产品</a>
+          <a class="nav-item" href="../production-market/production-market.html">农产品产销信息</a>
+          <a class="nav-item active" href="./message-board.html">留言板</a>
+        </div>
+
+        <div class="banner-section" style="height: 200px">
+          <img src="../../images/banner-6.png" alt="" style="height: 200px" />
+        </div>
+
+        <div class="message-board-section">
+          <div class="message-board-nav">
+            <h2 class="message-board-nav-left">您所在的位置： 首页 > 留言板</h2>
+            <a href="./write-message.html">
+              <el-button type="success">我要留言</el-button>
+            </a>
+          </div>
+          <div class="message-board-content">
+            <p class="message-board-content-title">用户留言</p>
+            <div class="message-board-content-list" v-for="item in rows">
+              <a :href="'./message-board-detail.html?' + item.id" class="message-board-content-item">
+                <span class="message-board-content-desc">{{item.title}}</span>
+                <span class="message-board-content-time">{{item.messageTime.substr(0,10)}}</span>
+              </a>
+            </div>
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="params.page"
+              :page-sizes="[5,10]"
+              :page-size="params.limit"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="total"
+              style="margin-top: 30px; text-align: center"
+            >
+            </el-pagination>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <a>主办单位：监利市农业农村局 &nbsp;&nbsp;</a>
+          <a>承办单位：武汉中迪联创科技有限公司&nbsp;&nbsp;</a>
+          <a>鄂ICP备 xxx号-1鄂公网安备 xxx号</a>
+        </footer>
+      </div>
+    </div>
+  </body>
+  <script src="../../assets/vue/vue.min.js"></script>
+  <script src="../../assets/element/index.js"></script>
+  <script src="../../js/api.js"></script>
+  <script src="../../assets/jquery/jquery.min.js"></script>
+  <script type="text/javascript">
+    var App = new Vue({
+      el: '#app',
+      data() {
+        return {
+          params: {
+            page: 1,
+            limit: 10,
+            targetSystem: '电子商务',
+          },
+          rows: [],
+          total: '',
+        };
+      },
+      created() {
+        this.getAllList();
+      },
+      methods: {
+        getAllList() {
+          doApi_2(
+            (res) => {
+              console.log(res);
+              if (res.status == 200) {
+                this.rows = res.data.rows;
+                this.total = res.data.total;
+              }
+            },
+            function (err) {
+              console.log(err);
+            },
+            null,
+            '/qa/listByPage',
+            'get',
+            this.params,
+            null
+          );
+        },
+        handleSizeChange(size) {
+          this.params.limit = size;
+          this.getAllList();
+        },
+        handleCurrentChange(page) {
+          this.params.page = page;
+          this.getAllList();
+        },
+      },
+    });
+  </script>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>注册</title>
+    <link rel="stylesheet" href="../../css/reset.css" />
+    <link rel="stylesheet" href="../../css/login.css" />
+    <link rel="stylesheet" href="../../fonts/element.css" />
+    <link rel="stylesheet" href="../../css/common.css" />
+    <!-- 去除input输入框 type=number时的上下箭头 -->
+    <style>
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+      input[type='number'] {
+        -moz-appearance: textfield;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="login-banner">
+        <a href="../../index.html">
+          <h1 class="login-title">监利市农业电子商务综合服务子系统</h1>
+        </a>
+        <h2 class="serve-tel">服务热线：400-888-888</h2>
+      </div>
+
+      <div class="register-mainer">
+        <div class="register-mainer-content">
+          <el-form ref="form" :model="form" :rules="rules" class="register-mainer-content-left">
+            <el-form-item class="register-input-item" prop="numTel">
+              <el-input placeholder="请输入手机号码" v-model="form.numTel" type="number" clearable>
+                <template slot="prepend">手机号码</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item class="register-input-item" style="margin-right: 130px" prop="picCode">
+              <el-input class="pic-input" v-model="form.picCode" placeholder="请输入验证码">
+                <template slot="prepend">图片验证码</template></el-input
+              >
+              <label class="label"
+                ><img id="codeValidateImg" />
+                <span class="picCode-laber" @click="flushValidateCode">点击获取</span></label
+              >
+            </el-form-item>
+            <el-form-item class="register-input-item" style="margin-right: 90px" prop="msgCode">
+              <el-input class="msg-input" v-model="form.msgCode" placeholder="请输入验证码">
+                <template slot="prepend">短信验证</template></el-input
+              >
+
+              <el-button v-show="show" type="success" size="mini" class="verification-code" @click="handleGetCode"
+                >获取验证码</el-button
+              >
+              <el-button
+                v-show="!show"
+                style="width: 100px !important"
+                type="success"
+                size="mini"
+                disabled
+                class="verification-code"
+                >{{count}}秒后重试</el-button
+              >
+            </el-form-item>
+            <el-form-item class="register-input-item" prop="setPassword">
+              <el-input placeholder="请设置密码" v-model="form.setPassword" type="password" show-password clearable>
+                <template slot="prepend">设置密码</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item class="register-input-item" prop="confirmPassword">
+              <el-input placeholder="请确认密码" v-model="form.confirmPassword" type="password" show-password clearable>
+                <template slot="prepend">确认密码</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item class="register-input-item" prop="inputContent">
+              <el-input placeholder="请输入您的姓名" v-model="form.inputContent" clearable>
+                <template slot="prepend">您的姓名</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item class="user-agreement-item" prop="checked">
+              <el-checkbox v-model="form.checked">我已阅读并同意</el-checkbox>
+              <el-link type="primary" @click="dialogVisible = true">《用户注册协议》</el-link>
+            </el-form-item>
+            <el-button type="warning" class="register-btn" @click="handleRegister">立即注册</el-button>
+          </el-form>
+          <div class="register-mainer-content-right">
+            <p class="register-mainer-content-right-text">已有账户，即刻去登录！</p>
+            <a href="./login.html"><el-button class="register-login-btn" type="success">登录</el-button></a>
+          </div>
+        </div>
+      </div>
+
+      <el-dialog title="用户注册协议" :visible.sync="dialogVisible" width="50%" center>
+        <el-input readonly resize="none" type="textarea" :rows="20" v-model="textarea"> </el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="handleConfirmDeal">同意用户协议</el-button>
+        </span>
+      </el-dialog>
+
+      <footer>
+        <div class="Copyright">Copyright © 2008-2020</div>
+        <div class="Copyright">中迪联创科技有限公司. All rights reserved.</div>
+        <div class="Copyright">公网安备 888888888888888号</div>
+      </footer>
+    </div>
+  </body>
+  <script src="../../assets/vue/vue.min.js"></script>
+  <script src="../../assets/element/index.js"></script>
+  <script src="../../assets/jquery/jquery.min.js"></script>
+  <script src="../../js/api.js"></script>
+  <script>
+    var App = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          form: {
+            numTel: '',
+            picCode: '',
+            msgCode: '',
+            setPassword: '',
+            confirmPassword: '',
+            inputContent: '',
+            checked: false,
+          },
+          show: true,
+          count: '',
+          timer: null,
+          rules: {
+            numTel: [
+              { required: true, message: '请输入手机号码', trigger: 'blur' },
+              {
+                validator: function (rule, value, callback) {
+                  if (/^1[34578]\d{9}$/.test(value) == false) {
+                    callback(new Error('请输入正确的手机号'));
+                  } else {
+                    callback();
+                  }
+                },
+                trigger: 'blur',
+              },
+            ],
+            picCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
+            msgCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
+            setPassword: [
+              { required: true, message: '请设置密码', trigger: 'blur' },
+              {
+                pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/,
+                message: '密码至少包含 数字和英文，长度6-20',
+              },
+            ],
+            confirmPassword: [
+              { required: true, message: '请再次输入密码', trigger: 'blur' },
+              {
+                pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/,
+                message: '密码至少包含 数字和英文，长度6-20',
+              },
+            ],
+            inputContent: [{ required: true, message: '请输入您的姓名', trigger: 'blur' }],
+            checked: [
+              {
+                required: true,
+                validator: function (rule, value, callback) {
+                  if (!value) {
+                    callback(new Error('请勾选用户注册协议'));
+                  } else {
+                    callback();
+                  }
+                },
+              },
+            ],
+          },
+          dialogVisible: false,
+          textarea: ``,
+        };
+      },
+      created() {
+        this.flushValidateCode();
+      },
+      methods: {
+        handleConfirmDeal() {
+          this.dialogVisible = false;
+          this.checked = true;
+        },
+        handleRegister() {
+          this.$refs.form.validate((valid) => {
+            if (valid == false) return this.$message.error('请检查信息是否填写完整！');
+            if (this.form.setPassword !== this.form.confirmPassword) return this.$message.warning('您设置的密码不一致');
+            let user = {
+              account: this.form.numTel,
+              code: this.form.msgCode,
+              name: this.form.inputContent,
+              password: this.form.confirmPassword,
+              phone: this.form.numTel,
+              smsType: 2,
+              sysName: '电子商务系统',
+            };
+            doApi_2(
+              (res) => {
+                if (res.status == 200) {
+                  var successMsg = this.$message('注册成功，3s跳转至登录页');
+                  var num = 3;
+                  var timer = setInterval(function () {
+                    num--;
+                    if (num == 0) {
+                      window.location.href = './login.html';
+                      window.clearInterval(timer);
+                    } else {
+                      successMsg.message = '注册成功，' + num + 's跳转至登录页';
+                    }
+                  }, 1000);
+                } else if (res.status == 10009) {
+                  this.$message('此号码已经注册过');
+                }
+              },
+              function (err) {
+                console.log(err);
+              },
+              null,
+              '/user/reg',
+              'post',
+              JSON.stringify(user),
+              'application/json'
+            );
+          });
+        },
+        handleGetCode() {
+          const TIME_COUNT = 60;
+          let sendSmsDto = {
+            mobile: this.form.numTel,
+          };
+          let picVerify = {
+            mobile: this.form.numTel,
+            code: this.form.picCode,
+          };
+          if (this.form.numTel != '' && this.form.picCode != '') {
+            this.count = TIME_COUNT;
+            this.show = false;
+            doApi_2(
+              (res) => {
+                if (res.status == 200) {
+                  doApi_2(
+                    (res) => {},
+                    function (err) {
+                      console.log(err);
+                    },
+                    null,
+                    ' /user/dens',
+                    'post',
+                    sendSmsDto,
+                    'application/json'
+                  );
+                } else {
+                  this.$message.error('图片验证码错误');
+                  this.form.picCode = '';
+                  this.flushValidateCode();
+                  this.show = true;
+                }
+              },
+              function (err) {
+                console.log(err);
+              },
+              null,
+              '/user/checkImgCode',
+              'get',
+              picVerify,
+              null
+            );
+            this.timer = setInterval(() => {
+              if (this.count > 0 && this.count <= TIME_COUNT) {
+                this.count--;
+              } else {
+                this.show = true;
+                clearInterval(this.timer);
+                this.timer = null;
+              }
+            }, 1000);
+          } else {
+            this.$message('请先填写手机号码或图片验证码');
+          }
+        },
+        flushValidateCode() {
+          var validateImagObject = document.getElementById('codeValidateImg');
+          // validateImagObject.src = "/getLoginImageCode.html?time=" + new Date();//向服务器请求验证码
+
+          //获取图片验证码
+          var xmlhttp;
+          xmlhttp = new XMLHttpRequest();
+          xmlhttp.open('GET', PREFIX_API_1 + '/suggest/ValidateCode', true);
+          xmlhttp.responseType = 'blob';
+          xmlhttp.onload = function () {
+            if (this.status == 200) {
+              var blob = this.response;
+              validateImagObject.src = window.URL.createObjectURL(blob);
+            }
+          };
+          xmlhttp.send();
+        },
+      },
+    });
+  </script>
+</html>

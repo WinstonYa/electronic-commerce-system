@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>监利市农业电子商务综合服务子系统</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="stylesheet" href="../fonts/element.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="title-section">
+        <h1 class="system-title">监利市农业电子商务综合服务子系统</h1>
+      </div>
+
+      <div class="mainer">
+        <div class="nav-list">
+          <a class="nav-item" href="../index.html">首页</a>
+          <a class="nav-item" href="./market-condition.html">市场行情</a>
+          <a class="nav-item" href="./price-condition.html">价格行情</a>
+          <a class="nav-item active" href="./price-trend.html">价格走势</a>
+          <a class="nav-item" href="./farm-products.html">优质农产品</a>
+          <a class="nav-item" href="./production-market/production-market.html">农产品产销信息</a>
+          <a class="nav-item" href="./message-board/message-board.html">留言板</a>
+        </div>
+
+        <div class="banner-section">
+          <img src="../images/banner-3.png" alt="" />
+        </div>
+
+        <div class="classify-section">
+          <div class="products-classify">
+            <div class="classify-title">产品分类：</div>
+            <div class="classify-list" v-for="(item,index) in productItem" @click="selected(item.value)">
+              <nav class="classify-item" :class="activeValue == index? 'active': ''">{{item.name}}</nav>
+            </div>
+          </div>
+          <div class="search-time">
+            <div class="time-quantum">农产品名称：</div>
+            <div class="time-selector">
+              <el-select v-model="value" placeholder="请选择农产品名称" clearable filterable>
+                <el-option v-for="item in options" :key="item.text" :label="item.text" :value="item.text"> </el-option>
+              </el-select>
+              <el-select v-model="yearValue" placeholder="请选择年份"
+                ><el-option v-for="item in yearOptions" :key="item.label" :label="item.label" :value="item.label">
+                </el-option
+              ></el-select>
+
+              <el-button type="primary" @click="handleQuery" style="width: 150px !important; margin-left: 20px"
+                >查询</el-button
+              >
+            </div>
+          </div>
+        </div>
+
+        <div id="c1" style="width: 600px; height: 400px"></div>
+
+        <footer class="footer">
+          <a>主办单位：监利市农业农村局 &nbsp;&nbsp;</a>
+          <a>承办单位：武汉中迪联创科技有限公司&nbsp;&nbsp;</a>
+          <a>鄂ICP备 xxx号-1鄂公网安备 xxx号</a>
+        </footer>
+      </div>
+    </div>
+  </body>
+  <script src="../assets/vue/vue.min.js"></script>
+  <script src="../assets/element/index.js"></script>
+  <script src="../assets/jquery/jquery.min.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../assets/AntV/g2.js"></script>
+  <script type="text/javascript">
+    var App = new Vue({
+      el: '#app',
+      data() {
+        return {
+          options: [],
+          yearOptions: [
+            {
+              label: '2020',
+            },
+            {
+              label: '2019',
+            },
+            {
+              label: '2018',
+            },
+            {
+              label: '2017',
+            },
+            {
+              label: '2016',
+            },
+            {
+              label: '2015',
+            },
+          ],
+          yearValue: '2020',
+          value: '橙子',
+          productItem: [
+            { value: 0, name: '水果' },
+            { value: 1, name: '蔬菜' },
+            { value: 2, name: '粮油' },
+            { value: 3, name: '牛羊猪肉' },
+            { value: 4, name: '家禽蛋类' },
+            { value: 5, name: '水产品' },
+            { value: 6, name: '其他' },
+          ],
+          activeValue: 0,
+          params: {
+            text: '',
+          },
+          chart: null, // 创建一个chart变量
+          data: [{ genre: '', sold: '' }],
+        };
+      },
+      created() {
+        this.getList();
+        this.handleQuery();
+      },
+      mounted() {
+        // this.initChart();
+      },
+      methods: {
+        getList() {
+          let formData = new FormData();
+          if (this.activeValue == 0) {
+            this.params.text = '水果';
+            formData.append('type', this.params.text);
+            this.getApi(formData);
+          } else if (this.activeValue == 1) {
+            this.params.text = '蔬菜';
+            formData.append('type', this.params.text);
+            this.getApi(formData);
+          } else if (this.activeValue == 2) {
+            this.params.text = '粮油';
+            formData.append('type', this.params.text);
+            this.getApi(formData);
+          } else if (this.activeValue == 3) {
+            this.params.text = '牛羊猪肉';
+            formData.append('type', this.params.text);
+            this.getApi(formData);
+          } else if (this.activeValue == 4) {
+            this.params.text = '家禽蛋类';
+            formData.append('type', this.params.text);
+            this.getApi(formData);
+          } else if (this.activeValue == 5) {
+            this.params.text = '水产品';
+            formData.append('type', this.params.text);
+            this.getApi(formData);
+          } else {
+            this.params.text = '其他';
+            formData.append('type', this.params.text);
+            this.getApi(formData);
+          }
+        },
+        getApi(params) {
+          doApi_3(
+            (res) => {
+              if (res.status == 200) {
+                this.options = res.data.rows;
+                console.log(this.options);
+              }
+            },
+            function (err) {
+              console.log(err);
+            },
+            null,
+            '/dic/getDicByType',
+            'post',
+            params,
+            false
+          );
+        },
+        selected(value) {
+          this.activeValue = value;
+          this.value = '';
+          this.getList();
+          this.handleQuery();
+        },
+        handleQuery() {
+          if (this.chart) {
+            $('#c1').empty();
+          }
+          params = {
+            category: this.productItem[this.activeValue].name,
+            product: this.value,
+            year: this.yearValue,
+          };
+          // console.log(params);
+          if (params.category !== '' && params.product !== '' && params.year !== '') {
+            let formData = new FormData();
+            formData.append('category', params.category);
+            formData.append('product', params.product);
+            formData.append('year', params.year);
+            doApi_3(
+              (res) => {
+                if (res.status == 200) {
+                  this.data = res.data.rows.map((item) => {
+                    return {
+                      genre: item.offerTime.substring(5, 10),
+                      sold: item.price,
+                    };
+                  });
+                  this.initChart();
+                }
+              },
+              function (err) {
+                console.log(err);
+              },
+              null,
+              '/price/listByProductAndTime',
+              'post',
+              formData,
+              false
+            );
+          }
+          this.getList();
+        },
+        initChart() {
+          // // // 初始化chart
+          // const chart = new G2.Chart({
+          //   container: 'c1',
+          //   width: 800,
+          //   height: 300,
+          // });
+          // chart.source(this.data);
+          // chart.interval().position('genre*sold');
+          // chart.scale('sold', {
+          //   alias: '价格（元）',
+          //   nice: true,
+          // });
+          // this.chart = chart; // 将chart变量赋值为vue中的chart, 后面可以直接使用this.chart调用图表对象
+
+          // this.chart.render();
+          // 创建图表对象
+          const chart = new G2.Chart({
+            container: 'c1', // 用于绘图的容器, [EL-ID] -- HTML标签ID属性
+            forceFit: true, // 图表的宽度自适应开关, 设置为 true 时表示自动取 dom（实例容器）的宽度。
+          });
+          // 设置数据源
+          chart.source(this.data);
+          // 设置提示
+          // chart.tooltips({
+          //   crosshairs: {
+          //     // rect 	表示矩形框，
+          //     // x 		表示水平辅助线，
+          //     // y|line  	【默认】表示垂直辅助线
+          //     // cross 	表示十字辅助线
+          //     type: 'line',
+          //   },
+          // });
+
+          // 线条作色(画线条)
+          chart
+            .line()
+            // 线条走势, 默认为直线
+            // geom.position('属性x*属性y'), 属性x会映射到X轴, 属性2会映射到Y轴
+            // 也可以传入数组方式 geam.position(['x', 'y'])
+            .position('genre*sold');
+
+          // 点作色(画点)
+          // 注意 point() 方法返回的是 Geom 对象. 不是 Chart 对象
+          chart.scale('sold', {
+            alias: '价格（元）',
+            nice: true,
+          });
+          chart
+            .point()
+            // 作色坐标为x*y, x-x轴, y-Y轴
+            // 这里的坐标系需要与 chart.line().position() 坐标系一致
+            // 如果写错(y*x)计算结果将不正确
+            .position('genre*sold')
+            // point 图形的 size 影响点的半径大小
+            // line, area, path 中的 size 影响线的粗细
+            // interval 的 size 影响柱状图的宽度
+            .size(4)
+            // 不同类型支持不同形状, 具体查看 https://www.yuque.com/antv/g2-docs/api-geom#lg9tks
+            .shape('circle')
+            // 设置当前形状样式
+            .style({ stroke: '#fff', lineWidth: 1 });
+
+          this.chart = chart;
+
+          // 最后一步渲染
+          chart.render();
+        },
+      },
+    });
+  </script>
+</html>
