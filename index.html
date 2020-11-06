@@ -12,23 +12,24 @@
   <body>
     <div id="app">
       <div class="title-section">
-        <h1 class="system-title">监利市农业电子商务综合服务子系统</h1>
-        <div class="login-content">
-          <a href="./html/login/login.html" v-if="loginShow">
-            <el-button type="success">登录</el-button>
-          </a>
-          <el-tooltip v-else class="item" effect="light" content="点击可退出登陆" placement="bottom">
-            <el-button type="info" @click="handleLogOut">用户：</i>{{userName}}</el-button>
-          </el-tooltip>
-          
-          <a href="./html/login/register.html">
-            <el-button type="primary">注册</el-button>
-          </a>
+        <div class="title-section-content">
+          <a class="system-title">监利市农业电子商务综合服务子系统</a>
+          <div class="login-content">
+            <a href="./html/login/login.html" v-if="loginShow">
+              <el-button type="success">登录</el-button>
+            </a>
+            <el-tooltip v-else class="item" effect="light" content="点击可退出登陆" placement="bottom">
+              <el-button type="info" @click="handleLogOut">用户：{{userName}}</el-button>
+            </el-tooltip>
+            <a href="./html/login/register.html">
+              <el-button type="primary">注册</el-button>
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="mainer">
-        <div class="nav-list">
+      <div class="nav-list">
+        <div class="nav-list-content">
           <a class="nav-item active" href="javascript:;">首页</a>
           <a class="nav-item" href="./html/market-condition.html">市场行情</a>
           <a class="nav-item" href="./html/price-condition.html">价格行情</a>
@@ -37,12 +38,14 @@
           <a class="nav-item" href="./html/production-market/production-market.html">农产品产销信息</a>
           <a class="nav-item" href="./html/message-board/message-board.html">留言板</a>
         </div>
+      </div>
 
+      <div class="mainer">
         <div class="swiper-container swiper1">
           <el-carousel height="400px">
-            <el-carousel-item style="width: 1200px; height: 400px" v-for="item in swiperList">
+            <el-carousel-item style="width: 1300px; height: 400px" v-for="item in swiperList">
               <a :href="'./html/index-detail.html?'+ item.id">
-                <img style="width: 1200px; height: 400px" :src="item.path" />
+                <img style="width: 1300px; height: 400px" :src="item.path" />
               </a>
             </el-carousel-item>
           </el-carousel>
@@ -50,10 +53,12 @@
 
         <div class="dynamic-section">
           <div class="dynamic-main">
-            <div class="dynamic-title">工作动态</div>
             <div class="dynamic-content-list">
-              <div class="dynamic-list-top">
-                <h2 class="dynamic-content-list-title">工作动态</h2>
+              <div class="dynamic-left-top">
+                <div class="dynamic-right-top">
+                  <span class="dynamic-right-title">工作动态</span>
+                  <a href="./html/laws-list.html?=1" class="dynamic-right-more">更多 >> </a>
+                </div>
                 <div class="dynamic-content-item" v-for="item in workArticleList">
                   <a class="dynamic-item-text" :href="'./html/index-detail.html?'+ item.id">{{item.title}}</a>
                   <span class="dynamic-item-time">{{item.pubTime}}</span>
@@ -62,11 +67,10 @@
             </div>
           </div>
           <div class="dynamic-main">
-            <div class="dynamic-title">政策法规</div>
             <div class="dynamic-content-list">
               <div class="dynamic-right-top">
                 <span class="dynamic-right-title">政策法规</span>
-                <a href="./html/laws-list.html" class="dynamic-right-more">更多 >> </a>
+                <a href="./html/laws-list.html?=2" class="dynamic-right-more">更多 >> </a>
               </div>
               <div class="dynamic-right-list">
                 <div class="dynamic-right-item" v-for="item in policyArticleList">
@@ -91,16 +95,16 @@
             </div>
             <div class="farm-knowledge-content">
               <div class="swiper-container swiper3">
-                <el-carousel height="360px" style="width: 400px">
+                <el-carousel height="380px" style="width: 400px">
                   <el-carousel-item v-for="item in farmSwiperList">
                     <a :href="'./html/index-detail.html?' + item.id">
-                      <img style="width: 400px; height: 360px" :src="item.path" />
+                      <img style="width: 400px; height: 380px" :src="item.path" />
                     </a>
                   </el-carousel-item>
                 </el-carousel>
               </div>
               <div class="farm-knowledge-content-right">
-                <div class="dynamic-content-list" v-if="activeValue == 0">
+                <div class="dynamic-content-list-detail" v-if="activeValue == 0">
                   <div class="dynamic-list-top">
                     <h2 class="dynamic-content-list-title">农事指导</h2>
                     <div class="dynamic-content-item" v-for="item in farmArticleList">
@@ -109,7 +113,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="dynamic-content-list" v-else-if="activeValue == 1">
+                <div class="dynamic-content-list-detail" v-else-if="activeValue == 1">
                   <div class="dynamic-list-top">
                     <h2 class="dynamic-content-list-title">管理资讯</h2>
                     <div class="dynamic-content-item" v-for="item in farmArticleList">
@@ -118,7 +122,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="dynamic-content-list" v-else="">
+                <div class="dynamic-content-list-detail" v-else="">
                   <div class="dynamic-list-top">
                     <h2 class="dynamic-content-list-title">种植知识</h2>
                     <div class="dynamic-content-item" v-for="item in farmArticleList">
@@ -146,14 +150,12 @@
         </div>
 
         <div class="farm-production-section">
-          <h1 class="farm-production-title">优质农产品</h1>
           <div class="farm-procution-swiper">
             <div class="product-top">
-              <span class="product-show">特色产品</span>
+              <span class="product-show">优质农产品</span>
               <a href="./html/farm-products.html">
                 <span class="product-more">更多 >></span>
               </a>
-              
             </div>
             <div class="swiper-container swiper2">
               <div class="swiper-wrapper" style="width: 1200px">
@@ -161,15 +163,16 @@
                   <a href="./html/farm-products.html">
                     <img :src="item.path" style="width: 217px; height: 160px; border-radius: 2px; cursor: pointer" />
                   </a>
-                  <p class="product-swiper-text">{{item.name}}</p>
+                  <p class="product-swiper-text"><b>{{item.name}}</b></p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <div class="link-section">
-          <p>友情链接：</p>
+      </div>
+      <div class="link-section">
+        <div class="link-section-content">
+          <p><b>友情链接：</b></p>
           <div class="link-list">
             <a class="link-item" href="http://39.104.61.47:8093/gyx_System/">监利市农业公益性服务子系统</a>
             <a class="link-item">产业园三维可视化子系统</a>
@@ -185,15 +188,17 @@
             <a class="link-item"></a>
           </div>
         </div>
-
-        <footer class="footer">
-          <a>主办单位：监利市农业农村局 &nbsp;&nbsp;</a>
-          <a>承办单位：武汉中迪联创科技有限公司&nbsp;&nbsp;</a>
-          <a>鄂ICP备 xxx号-1鄂公网安备 xxx号</a>
-        </footer>
       </div>
     </div>
   </body>
+  <footer class="footer">
+    <a href="http://www.jianli.gov.cn/xxgk_30/xxgkml/jgzn/201912/t20191215_427946.shtml"
+      >主办单位：监利市农业农村局 &nbsp;&nbsp;</a
+    >
+    <a href="http://www.zd-tech.net/">承办单位：武汉中迪联创科技有限公司&nbsp;&nbsp;</a>
+    <!-- Winston 2020 -->
+    <a>鄂ICP备 xxx号-1鄂公网安备 xxx号</a>
+  </footer>
   <script src="./assets/vue/vue.min.js"></script>
   <script src="./assets/element/index.js"></script>
   <script src="./js/swiper.min.js"></script>
@@ -239,26 +244,28 @@
         this.showLogin();
       },
       methods: {
-        handleLogOut(){
+        handleLogOut() {
           this.$confirm('确认是否退出登陆, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '退出成功!'
-          });
-          localStorage.removeItem('token');
-          localStorage.removeItem('username');
-          localStorage.removeItem('loginForm');
-          this.loginShow = true
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消退出'
-          });          
-        });
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          })
+            .then(() => {
+              this.$message({
+                type: 'success',
+                message: '退出成功!',
+              });
+              localStorage.removeItem('token');
+              localStorage.removeItem('username');
+              localStorage.removeItem('loginForm');
+              this.loginShow = true;
+            })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消退出',
+              });
+            });
         },
         selected(value) {
           this.activeValue = value;

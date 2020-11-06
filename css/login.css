@@ -6,7 +6,7 @@
 }
 
 .login-banner {
-  width: 1300px;
+  max-width: 1920px;
   height: 100px;
   background: rgb(0, 166, 90);
   margin: 0 auto;
@@ -16,18 +16,20 @@
 }
 
 .login-title {
+  min-width: 600px;
   font-size: 35px;
   color: #000;
 }
 
 .serve-tel {
+  min-width: 300px;
   color: #fff;
   font-size: 25px;
 }
 
 .login-mainer {
-  width: 1300px;
-  height: 500px;
+  max-width: 1920px;
+  height: 800px;
   margin: 0 auto;
   position: relative;
 }
@@ -37,7 +39,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 500px;
+  height: 100%;
   min-width: 1000px;
   z-index: -10;
   zoom: 1;
@@ -50,10 +52,11 @@
 
 .login-container {
   position: absolute;
-  right: 20px;
-  top: 100px;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
   width: 400px;
-  height: 350px;
+  height: 360px;
   background: #fff;
   /* opacity: 0.9; */
   padding: 10px;
@@ -120,24 +123,29 @@
   margin: auto;
 }
 
-footer {
-  width: 1300px;
+.footer {
+  bottom: 10px;
+  width: 100%;
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  margin: auto;
+  margin: 0 auto;
   font-size: 14px;
   color: #999;
-  border-top: 1px solid#999;
-  margin-top: 80px;
+  border-top: 1px solid#eee;
+}
+
+.footer a {
+  min-width: 250px;
+  color: #999;
 }
 
 /* -------register.css-------------- */
 
 .register-mainer {
   width: 1300px;
-  height: 600px;
+  height: 700px;
   margin: auto;
   display: flex;
   align-items: center;
@@ -181,11 +189,11 @@ footer {
   top: 5px;
 }
 
-.picCode-laber{
+.picCode-laber {
   text-decoration: underline;
 }
 
-.picCode-laber:hover{
+.picCode-laber:hover {
   color: #81bef7;
   cursor: pointer;
 }

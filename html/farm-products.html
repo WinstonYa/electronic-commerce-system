@@ -11,11 +11,13 @@
   <body>
     <div id="app">
       <div class="title-section">
-        <h1 class="system-title">监利市农业电子商务综合服务子系统</h1>
+        <div class="title-section-content">
+          <a href="../index.html" class="system-title">监利市农业电子商务综合服务子系统</a>
+        </div>
       </div>
 
-      <div class="mainer">
-        <div class="nav-list">
+      <div class="nav-list">
+        <div class="nav-list-content">
           <a class="nav-item" href="../index.html">首页</a>
           <a class="nav-item" href="./market-condition.html">市场行情</a>
           <a class="nav-item" href="./price-condition.html">价格行情</a>
@@ -24,7 +26,9 @@
           <a class="nav-item" href="./production-market/production-market.html">农产品产销信息</a>
           <a class="nav-item" href="./message-board/message-board.html">留言板</a>
         </div>
+      </div>
 
+      <div class="mainer">
         <div class="banner-section">
           <img src="../images/banner-4.png" alt="" />
         </div>
@@ -44,19 +48,19 @@
                   <a class="products-item-img">
                     <img :src="'http://' + item.imgLists[0].path" />
                   </a>
-                  <div style="display: flex;justify-content: space-between;">
+                  <div style="display: flex; justify-content: space-between">
                     <div>
-                      <p class="products-item-price">￥{{item.price}}</p>
-                      <p class="products-shopping-mall">{{item.productName}}</p>
+                      <p class="products-item-price"><b>￥{{item.price}}</b></p>
+                      <p class="products-shopping-mall"><b> {{item.productName}}</b></p>
                     </div>
-                    <div style="display: flex;align-items: flex-end;height: 50px;">
-                      <img src="../images/hot.png" style="width: 25px; height: 25px; " />
-                      <span style="font-size: 16px;margin-right: 15px;">{{item.popularity}}</span>
+                    <div style="display: flex; align-items: flex-end; height: 50px">
+                      <img src="../images/hot.png" style="width: 25px; height: 25px" />
+                      <span style="font-size: 16px; margin-right: 15px"> {{item.popularity}}</span>
                     </div>
                   </div>
 
                   <div class="products-address-time">
-                    <span class="products-address">{{item.productOrigin}}</span>
+                    <span class="products-address"><b>{{item.productOrigin}}</b> </span>
                     <span class="products-time">{{item.pubTime.substr(0,10)}}</span>
                   </div>
                 </div>
@@ -78,14 +82,14 @@
                 <img src="../images/product-3.png" alt="" />
               </div>
               <div class="hot-supply">
-                <h2 class="hot-supply-title">热门供应</h2>
+                <h2 class="hot-supply-title"><b>热门供应</b></h2>
                 <div class="hot-supply-item" v-for="item in hotRows" @click="farmInfoDialog(item)">
                   <a class="hot-supply-item-img">
                     <img :src="'http://' + item.imgLists[0].path" />
                   </a>
                   <p class="hot-supply-item-desc">
-                    <span>{{item.productName}}</span>
-                    <span>{{item.productOrigin}}</span>
+                    <span>{{item.productName}} </span>
+                    <span>{{item.productOrigin}} </span>
                   </p>
                 </div>
               </div>
@@ -94,8 +98,8 @@
         </div>
 
         <!-- 页面弹出框 -->
-        <el-dialog title="农产品详情" :visible.sync="dialogVisible" width="50%">
-          <p>农产品图片</p>
+        <el-dialog title="农产品详情" :visible.sync="dialogVisible" width="900px">
+          <p><b>农产品图片</b></p>
           <el-carousel height="150px" style="width: 400px; margin: 0 auto">
             <el-carousel-item
               v-for="item in farmInfo.imgLists"
@@ -105,24 +109,63 @@
               <img :src="'http://' + item.path" style="width: 200px; height: 150px" />
             </el-carousel-item>
           </el-carousel>
-          <el-form>
-            <el-form-item label="农产品分类："> {{farmInfo.productCategory}} </el-form-item>
-            <el-form-item label="农产品名称："> {{farmInfo.productName}} </el-form-item>
-            <el-form-item label="农产品产地："> {{farmInfo.productOrigin}} </el-form-item>
-            <el-form-item label="浏览量："> {{farmInfo.popularity}} </el-form-item>
-            <el-form-item label="添加时间："> {{farmInfo.pubTime}} </el-form-item>
-            <el-form-item label="农产品描述："> {{farmInfo.description}} </el-form-item>
-          </el-form>
+          <!-- <el-form>
+            <el-form-item> <b>农产品分类：</b> {{farmInfo.productCategory}} </el-form-item>
+            <el-form-item><b>农产品名称：</b> {{farmInfo.productName}} </el-form-item>
+            <el-form-item><b>农产品产地：</b> {{farmInfo.productOrigin}} </el-form-item>
+            <el-form-item><b>浏览量：</b> {{farmInfo.popularity}} </el-form-item>
+            <el-form-item><b>添加时间：</b> {{farmInfo.pubTime}} </el-form-item>
+            <el-form-item><b>农产品描述：</b> {{farmInfo.description}} </el-form-item>
+          </el-form> -->
+          <div class="company-info-table">
+            <table class="authentication_info" cellpadding="0" cellspacing="0">
+              <tr style="background-color: rgb(255, 255, 255)">
+                <td><b>农产品分类： </b>{{farmInfo.productCategory}}</td>
+                <td><b>农产品名称：</b>{{farmInfo.productName}}</td>
+                <td><b>农产品产地： </b>{{farmInfo.productOrigin}}</td>
+              </tr>
+              <tr style="background-color: rgb(255, 255, 255)">
+                <td><b>浏览量：</b> {{farmInfo.popularity}}</td>
+                <td><b>添加时间：</b>{{farmInfo.pubTime}}</td>
+                <td><b>审核状态：</b>{{farmInfo.status}}</td>
+              </tr>
+              <tr style="padding: 0px 10px; background-color: rgb(255, 255, 255)">
+                <td colspan="3">
+                  <div style="height: 90px; overflow: auto"><b>农产品描述：</b>{{farmInfo.description}}</div>
+                </td>
+              </tr>
+            </table>
+          </div>
         </el-dialog>
-
-        <footer class="footer">
-          <a>主办单位：监利市农业农村局 &nbsp;&nbsp;</a>
-          <a>承办单位：武汉中迪联创科技有限公司&nbsp;&nbsp;</a>
-          <a>鄂ICP备 xxx号-1鄂公网安备 xxx号</a>
-        </footer>
+      </div>
+      <div class="link-section">
+        <div class="link-section-content">
+          <p><b>友情链接：</b></p>
+          <div class="link-list">
+            <a class="link-item" href="http://39.104.61.47:8093/gyx_System/">监利市农业公益性服务子系统</a>
+            <a class="link-item">产业园三维可视化子系统</a>
+            <a class="link-item">农业电子商务综合服务子系统</a>
+            <a class="link-item">农业产业园大屏展示系统</a>
+            <a class="link-item">农产品质量安全追溯管理平台</a>
+            <a class="link-item">农产品质量安全监督管理系统</a>
+            <a class="link-item" href="http://39.104.61.47:8093/zsxx_System/">农产品质量安全追溯信息系统</a>
+            <a class="link-item">稻虾共作物联网子系统</a>
+            <a class="link-item">农产品质量安全追溯应用系统</a>
+            <a class="link-item"></a>
+            <a class="link-item"></a>
+            <a class="link-item"></a>
+          </div>
+        </div>
       </div>
     </div>
   </body>
+  <footer class="footer">
+    <a href="http://www.jianli.gov.cn/xxgk_30/xxgkml/jgzn/201912/t20191215_427946.shtml"
+      >主办单位：监利市农业农村局 &nbsp;&nbsp;</a
+    >
+    <a href="http://www.zd-tech.net/">承办单位：武汉中迪联创科技有限公司&nbsp;&nbsp;</a>
+    <a>鄂ICP备 xxx号-1鄂公网安备 xxx号</a>
+  </footer>
   <script src="../assets/vue/vue.min.js"></script>
   <script src="../assets/element/index.js"></script>
   <script src="../js/api.js"></script>
@@ -143,9 +186,9 @@
             { value: 1, name: '水果' },
             { value: 2, name: '蔬菜' },
             { value: 3, name: '粮油' },
-            { value: 4, name: '牛肉猪肉' },
+            { value: 4, name: '牛羊猪肉' },
             { value: 5, name: '家禽蛋类' },
-            { value: 6, name: '水产' },
+            { value: 6, name: '水产品' },
             { value: 7, name: '其他' },
           ],
           activeValue: 0,
@@ -161,11 +204,11 @@
       methods: {
         farmInfoDialog(value) {
           this.dialogVisible = true;
+          console.log(value);
           this.farmInfo = value;
           let id = value.id;
           doApi_2(
-            (res) => {
-            },
+            (res) => {},
             function (err) {
               console.log(err);
             },
@@ -195,13 +238,13 @@
             this.params.productCategory = '粮油';
             this.getApi(this.params);
           } else if (this.activeValue == 4) {
-            this.params.productCategory = '牛肉猪肉';
+            this.params.productCategory = '牛羊猪肉';
             this.getApi(this.params);
           } else if (this.activeValue == 5) {
             this.params.productCategory = '家禽蛋类';
             this.getApi(this.params);
           } else if (this.activeValue == 6) {
-            this.params.productCategory = '水产';
+            this.params.productCategory = '水产品';
             this.getApi(this.params);
           } else {
             this.params.productCategory = '其他';

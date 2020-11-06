@@ -11,20 +11,28 @@
   <body>
     <div id="app">
       <div class="title-section">
-        <h1 class="system-title">监利市农业电子商务综合服务子系统</h1>
+        <div class="title-section-content">
+          <a href="../../index.html" class="system-title">监利市农业电子商务综合服务子系统</a>
+        </div>
       </div>
 
-      <div class="mainer">
-        <div class="nav-list">
+      <div class="nav-list">
+        <div class="nav-list-content">
           <a class="nav-item" href="../../index.html">首页</a>
-          <a class="nav-item" href="../market-condition.html">市场行情</a>
+          <a class="nav-item" :class="articleContent.type == '市场行情'? 'active': ''" href="../market-condition.html"
+            >市场行情</a
+          >
           <a class="nav-item" href="../price-condition.html">价格行情</a>
           <a class="nav-item" href="../price-trend.html">价格走势</a>
           <a class="nav-item" href="../farm-products.html">优质农产品</a>
-          <a class="nav-item" href="./production-market.html">农产品产销信息</a>
+          <a class="nav-item" :class="articleContent.type == '产销信息'? 'active': ''" href="./production-market.html"
+            >农产品产销信息</a
+          >
           <a class="nav-item" href="../message-board/message-board.html">留言板</a>
         </div>
+      </div>
 
+      <div class="mainer">
         <div class="banner-section">
           <img src="../../images/banner-5.png" alt="" />
         </div>
@@ -46,23 +54,42 @@
             <span class="issue-auther">作者：{{articleContent.author}}</span>
             <span class="issue-read">阅读量：（{{articleContent.reading}}）</span>
           </div>
+          <div class="market-info-text-content" v-html="articleContent.content"></div>
         </div>
 
-        <div class="market-info-text-content" v-html="articleContent.content"></div>
-
-        <div class="market-info-article-change">
+        <!-- <div class="market-info-article-change">
           <a class="market-info-article-change-item">上一篇：市商务局三措并举助推农村电商发展</a>
           <a class="market-info-article-change-item">下一篇：市商务局三措并举助推农村电商发展</a>
+        </div> -->
+      </div>
+      <div class="link-section">
+        <div class="link-section-content">
+          <p><b>友情链接：</b></p>
+          <div class="link-list">
+            <a class="link-item" href="http://39.104.61.47:8093/gyx_System/">监利市农业公益性服务子系统</a>
+            <a class="link-item">产业园三维可视化子系统</a>
+            <a class="link-item">农业电子商务综合服务子系统</a>
+            <a class="link-item">农业产业园大屏展示系统</a>
+            <a class="link-item">农产品质量安全追溯管理平台</a>
+            <a class="link-item">农产品质量安全监督管理系统</a>
+            <a class="link-item" href="http://39.104.61.47:8093/zsxx_System/">农产品质量安全追溯信息系统</a>
+            <a class="link-item">稻虾共作物联网子系统</a>
+            <a class="link-item">农产品质量安全追溯应用系统</a>
+            <a class="link-item"></a>
+            <a class="link-item"></a>
+            <a class="link-item"></a>
+          </div>
         </div>
-
-        <footer class="footer">
-          <a>主办单位：监利市农业农村局 &nbsp;&nbsp;</a>
-          <a>承办单位：武汉中迪联创科技有限公司&nbsp;&nbsp;</a>
-          <a>鄂ICP备 xxx号-1鄂公网安备 xxx号</a>
-        </footer>
       </div>
     </div>
   </body>
+  <footer class="footer">
+    <a href="http://www.jianli.gov.cn/xxgk_30/xxgkml/jgzn/201912/t20191215_427946.shtml"
+      >主办单位：监利市农业农村局 &nbsp;&nbsp;</a
+    >
+    <a href="http://www.zd-tech.net/">承办单位：武汉中迪联创科技有限公司&nbsp;&nbsp;</a>
+    <a>鄂ICP备 xxx号-1鄂公网安备 xxx号</a>
+  </footer>
   <script src="../../assets/vue/vue.min.js"></script>
   <script src="../../assets/element/index.js"></script>
   <script src="../../js/api.js"></script>
@@ -73,7 +100,9 @@
       data() {
         return {
           //文章内容
-          articleContent: {},
+          articleContent: {
+            content: '',
+          },
         };
       },
       created() {
@@ -91,6 +120,10 @@
             (res) => {
               if (res.status == 200) {
                 this.articleContent = res.data;
+                this.articleContent.content = res.data.content.replace(
+                  /<img/g,
+                  "<img style='max-width:100%;height:auto;'"
+                );
               }
             },
             function (err) {

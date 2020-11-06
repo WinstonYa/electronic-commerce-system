@@ -1,5 +1,8 @@
 const PREFIX_API_1 = 'http://192.168.8.166:8766';
 const PREFIX_API_2 = 'http://192.168.8.166:8776';
+//39.104.61.47
+// const PREFIX_API_1 = 'http://39.104.61.47:8766';
+// const PREFIX_API_2 = 'http://39.104.61.47:8776';
 
 function doApi_1(sucFunc, errFunc, comFunc, url, type, params, contentType, async) {
   $.ajax({

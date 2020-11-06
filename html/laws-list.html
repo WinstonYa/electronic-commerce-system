@@ -11,11 +11,13 @@
   <body>
     <div id="app">
       <div class="title-section">
-        <h1 class="system-title">监利市农业电子商务综合服务子系统</h1>
+        <div class="title-section-content">
+          <a href="../index.html" class="system-title">监利市农业电子商务综合服务子系统</a>
+        </div>
       </div>
 
-      <div class="mainer">
-        <div class="nav-list">
+      <div class="nav-list">
+        <div class="nav-list-content">
           <a class="nav-item" href="../index.html">首页</a>
           <a class="nav-item" href="./market-condition.html">市场行情</a>
           <a class="nav-item" href="./price-condition.html">价格行情</a>
@@ -24,17 +26,19 @@
           <a class="nav-item" href="./production-market/production-market.html">农产品产销信息</a>
           <a class="nav-item" href="./message-board/message-board.html">留言板</a>
         </div>
+      </div>
 
+      <div class="mainer">
         <div class="banner-section" style="height: 200px">
           <img src="../images/banner-6.png" alt="" style="height: 200px" />
         </div>
 
         <div class="message-board-section">
           <div class="message-board-nav">
-            <h2 class="message-board-nav-left">您所在的位置： 首页 > 政策法规</h2>
+            <h2 class="message-board-nav-left">您所在的位置： 首页 > {{articleTypeTitle}}</h2>
           </div>
           <div class="message-board-content">
-            <p class="message-board-content-title">政策法规</p>
+            <p class="message-board-content-title">{{articleTypeTitle}}</p>
             <div class="message-board-content-list" v-for="item in policyArticleList">
               <a :href="'./index-detail.html?' + item.id" class="message-board-content-item">
                 <span class="message-board-content-desc">{{item.title}}</span>
@@ -54,15 +58,16 @@
             </el-pagination>
           </div>
         </div>
-
-        <footer class="footer">
-          <a>主办单位：监利市农业农村局 &nbsp;&nbsp;</a>
-          <a>承办单位：武汉中迪联创科技有限公司&nbsp;&nbsp;</a>
-          <a>鄂ICP备 xxx号-1鄂公网安备 xxx号</a>
-        </footer>
       </div>
     </div>
   </body>
+  <footer class="footer">
+    <a href="http://www.jianli.gov.cn/xxgk_30/xxgkml/jgzn/201912/t20191215_427946.shtml"
+      >主办单位：监利市农业农村局 &nbsp;&nbsp;</a
+    >
+    <a href="http://www.zd-tech.net/">承办单位：武汉中迪联创科技有限公司&nbsp;&nbsp;</a>
+    <a>鄂ICP备 xxx号-1鄂公网安备 xxx号</a>
+  </footer>
   <script src="../assets/vue/vue.min.js"></script>
   <script src="../assets/element/index.js"></script>
   <script src="../js/api.js"></script>
@@ -79,6 +84,7 @@
           },
           policyArticleList: [],
           total: '',
+          articleTypeTitle: '',
         };
       },
       created() {
@@ -86,13 +92,23 @@
       },
       methods: {
         getAllList() {
+          let search = location.search;
+          let sysTypeId = search.substr(2);
+          console.log(sysTypeId);
           let params = {
             pageNum: 1,
             pageRow: 10,
             sysType: '电子商务系统',
-            articleType: '政策法规',
+            articleType: '',
             status: 1,
           };
+          if (sysTypeId == 1) {
+            params.articleType = '工作动态';
+            this.articleTypeTitle = '工作动态';
+          } else {
+            params.articleType = '政策法规';
+            this.articleTypeTitle = '政策法规';
+          }
           doApi_1(
             (res) => {
               console.log(res);
@@ -102,7 +118,7 @@
                   return {
                     id: item.id,
                     title: item.title,
-                    time: item.pub_time
+                    time: item.pub_time,
                   };
                 });
               }
